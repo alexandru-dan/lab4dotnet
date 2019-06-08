@@ -21,7 +21,7 @@ namespace Test
         {
             config = Options.Create(new AppSettings
             {
-                Secret = "LALALALA"
+                Secret = "Secret string for secret things"
             });
         }
 
