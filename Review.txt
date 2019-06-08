@@ -1,0 +1,9 @@
+Review for lab 3 from Bichescu Liviu
+
+a. Respectarea convențiilor de denumire     -> toate conventiile de denumire au fost respectate. -> 10
+b. Organizarea codului în module / clase / metode   -> 10
+c. Stilul de scriere al codului: consistență, ușurința înțelegerii etc.  -> codul a fost usor de inteles si de modificat -> 10
+d. Corectitudinea API-ului  -> 10
+e. Ușurința de folosire a API-ului (testați folosind Postman) și respectarea bunelor practici -> 10
+
+Media finala: 10 
