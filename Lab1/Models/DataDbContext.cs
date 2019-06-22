@@ -19,7 +19,7 @@ namespace Lab1.Models
             });
 
             //builder.Entity<Comment>()
-            //    .HasOne(f => f.Expense)
+            //    .HasOne(f => f.Movie)
             //    .WithMany(c => c.Comments)
             //    .OnDelete(DeleteBehavior.Cascade);
         }
@@ -28,5 +28,7 @@ namespace Lab1.Models
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserToRole> UserToRoles { get; set; }
     }
 }

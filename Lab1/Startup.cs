@@ -1,5 +1,6 @@
 ﻿using Lab1.Models;
 using Lab1.Services;
+using Lab1.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -93,6 +94,12 @@ namespace Lab1
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IRegisterValidator, RegisterValidator>();
+
+            services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IUserRoleValidator, UserRoleValidator>();
+
+            services.AddScoped<IUserToRoleServices, UserToRoleServices>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

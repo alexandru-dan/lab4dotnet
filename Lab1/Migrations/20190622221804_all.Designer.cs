@@ -4,14 +4,16 @@ using Lab1.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Lab1.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class MovieDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190622221804_all")]
+    partial class all
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

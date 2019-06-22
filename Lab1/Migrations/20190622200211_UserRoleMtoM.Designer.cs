@@ -4,14 +4,16 @@ using Lab1.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Lab1.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class MovieDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190622200211_UserRoleMtoM")]
+    partial class UserRoleMtoM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,8 +56,6 @@ namespace Lab1.Migrations
 
                     b.Property<int>("MovieGenre");
 
-                    b.Property<int?>("OwnerId");
-
                     b.Property<double>("Rating");
 
                     b.Property<int>("ReleseYear");
@@ -63,11 +63,13 @@ namespace Lab1.Migrations
                     b.Property<string>("Title")
                         .HasMaxLength(100);
 
+                    b.Property<int?>("UserId");
+
                     b.Property<int>("WasWatched");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Movies");
                 });
@@ -146,15 +148,15 @@ namespace Lab1.Migrations
 
             modelBuilder.Entity("Lab1.Models.Movie", b =>
                 {
-                    b.HasOne("Lab1.Models.User", "Owner")
+                    b.HasOne("Lab1.Models.User")
                         .WithMany("Movie")
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Lab1.Models.UserToRole", b =>
                 {
                     b.HasOne("Lab1.Models.User", "User")
-                        .WithMany("UserToRoles")
+                        .WithMany("UserToRole")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 

@@ -1,7 +1,6 @@
 ﻿using Lab1.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace Lab1.ViewModels
 {
-    public class RegisterPostModel
+    public class UserPostModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Username { get; set; }
-        [EmailAddress]
+        public string UserName { get; set; }
         public string Email { get; set; }
-        [Required, StringLength(50, MinimumLength = 6)]
         public string Password { get; set; }
+        public string UserRoleName { get; set; }
+
 
         private static string ComputeSha256Hash(string rawData)
         {
@@ -38,18 +37,17 @@ namespace Lab1.ViewModels
         }
 
 
-        public static User ToUser(RegisterPostModel userModel)
+        public static User ToUser(UserPostModel userModel)
         {
+
             return new User
             {
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
-                Username = userModel.Username,
+                Username = userModel.UserName,
                 Email = userModel.Email,
-                Password = ComputeSha256Hash(userModel.Password),
-                DataRegistered = DateTime.Now
+                Password = ComputeSha256Hash(userModel.Password)
             };
         }
-
     }
 }

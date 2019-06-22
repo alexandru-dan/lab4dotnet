@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lab1.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Regular, Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class MovieController : ControllerBase
@@ -19,9 +19,12 @@ namespace Lab1.Controllers
 
         private IMovieService service;
 
-        public MovieController(IMovieService service)
+        private IUsersService userService;
+
+        public MovieController(IMovieService service, IUsersService userService)
         {
             this.service = service;
+            this.userService = userService;
         }
 
 
@@ -89,13 +92,17 @@ namespace Lab1.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post([FromBody] MoviePostModel movie)
         {
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            service.Create(movie);
-            return Ok(movie);
+            User addedBy = userService.GetCurrentUser(HttpContext);
+
+            service.Create(movie, addedBy);
+
+            return Ok();
         }
 
         /// <summary>
@@ -122,7 +129,7 @@ namespace Lab1.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Put(int id, [FromBody] Movie movie)
+        public IActionResult Put(int id, [FromBody] MoviePostModel movie)
         {
             if (!ModelState.IsValid)
             {

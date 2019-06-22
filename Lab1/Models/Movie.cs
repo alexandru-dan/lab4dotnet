@@ -35,6 +35,8 @@ namespace Lab1.Models
         // comments
         public List<Comment> Comments { get; set; }
 
+        public User Owner { get; set; }
+
 
     }
 }

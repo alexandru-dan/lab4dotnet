@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lab1.Models
 {
-    public enum UserRole
-    {
-        Regular,
-        UserManager,
-        Admin,
-    }
+    //public enum UserRole
+    //{
+    //    Regular,
+    //    UserManager,
+    //    Admin,
+    //}
     public class User
     {
         public int Id { get; set; }
@@ -20,7 +20,12 @@ namespace Lab1.Models
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        [EnumDataType(typeof(UserRole))]
-        public UserRole UserRole { get; set; }
+
+        //[EnumDataType(typeof(UserRole))]
+        //public UserRole UserRole { get; set; }
+        public DateTime DataRegistered { get; set; }
+        public List<Movie> Movie { get; set; }
+        public IEnumerable<UserToRole> UserToRoles { get; set; }
+
     }
 }
