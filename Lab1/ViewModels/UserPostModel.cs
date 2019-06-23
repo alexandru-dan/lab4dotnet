@@ -12,7 +12,7 @@ namespace Lab1.ViewModels
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string UserRoleName { get; set; }
@@ -44,7 +44,7 @@ namespace Lab1.ViewModels
             {
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
-                Username = userModel.UserName,
+                Username = userModel.Username,
                 Email = userModel.Email,
                 Password = ComputeSha256Hash(userModel.Password)
             };
