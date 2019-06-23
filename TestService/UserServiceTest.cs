@@ -53,8 +53,8 @@ namespace Test
                 var result = usersService.Register(added);
 
                 Assert.IsNull(result);
-                Assert.AreEqual(added.Username, context.Users.FirstOrDefault(u => u.Id == 1).Username);
-                Assert.AreEqual(1, context.UserToRoles.FirstOrDefault(uur => uur.Id == 1).UserId);
+                Assert.AreEqual(added.Username, context.Users.FirstOrDefault(u => u.Id == (context.Users.FirstOrDefault(ur => ur.Username == added.Username)).Id).Username);
+                Assert.AreEqual(context.UserToRoles.First().Id , context.UserToRoles.FirstOrDefault(uur => uur.Id == (context.UserToRoles.FirstOrDefault(b => b.User.Username == added.Username)).Id).Id);
             }
         }
 
@@ -200,7 +200,7 @@ namespace Test
                 };
 
                 usersService.Register(added1);
-                var userById = usersService.GetById(1);
+                var userById = usersService.GetById(context.Users.FirstOrDefault(u => u.Id == (context.Users.FirstOrDefault(ur => ur.Username == added1.Username)).Id).Id);
 
                 Assert.NotNull(userById);
                 Assert.AreEqual("firstName1", userById.FirstName);
@@ -315,7 +315,7 @@ namespace Test
                 Assert.IsNull(userCreated);
                 Assert.AreEqual(1, usersService.GetAll().Count());
 
-                var userDeleted = usersService.Delete(1);
+                var userDeleted = usersService.Delete(context.Users.FirstOrDefault(u => u.Id == (context.Users.FirstOrDefault(ur => ur.Username == added1.Username)).Id).Id);
 
                 Assert.NotNull(userDeleted);
                 Assert.AreEqual(0, usersService.GetAll().Count());

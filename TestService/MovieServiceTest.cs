@@ -55,11 +55,11 @@ namespace TestService
         [Test]
         public void GetByIdShouldReturnFilmWithCorrectIdNumber()
         {
-            var options = new DbContextOptionsBuilder<DataDbContext>()
+            var options1 = new DbContextOptionsBuilder<DataDbContext>()
               .UseInMemoryDatabase(databaseName: nameof(GetByIdShouldReturnFilmWithCorrectIdNumber))
               .Options;
 
-            using (var context = new DataDbContext(options))
+            using (var context = new DataDbContext(options1))
             {
                 var filmService = new MovieService(context);
                 var addedFilm = filmService.Create(new MoviePostModel
@@ -75,7 +75,7 @@ namespace TestService
                     WasWatched = "NO"
                 }, null);
 
-                var theFilm = filmService.GetById(1);
+                var theFilm = filmService.GetById(addedFilm.Id);
                 Assert.AreEqual("Testare", theFilm.Title);
             }
         }
@@ -84,11 +84,11 @@ namespace TestService
         [Test]
         public void CreateShouldAddAndReturnTheFilmCreated()
         {
-            var options = new DbContextOptionsBuilder<DataDbContext>()
+            var options2 = new DbContextOptionsBuilder<DataDbContext>()
               .UseInMemoryDatabase(databaseName: nameof(CreateShouldAddAndReturnTheFilmCreated))
               .Options;
 
-            using (var context = new DataDbContext(options))
+            using (var context = new DataDbContext(options2))
             {
                 var filmService = new MovieService(context);
                 var addedFilm = filmService.Create(new MoviePostModel
@@ -110,16 +110,15 @@ namespace TestService
         }
 
 
-        //TODO: nu stiu de ce nu functioneaza testul, Postman functioneaza !!!
         [Test]
         public void UpsertShouldChangeTheFildValues()
         {
-            var options = new DbContextOptionsBuilder<DataDbContext>()
+            var options3 = new DbContextOptionsBuilder<DataDbContext>()
               .UseInMemoryDatabase(databaseName: nameof(UpsertShouldChangeTheFildValues))
               .EnableSensitiveDataLogging()
               .Options;
 
-            using (var context = new DataDbContext(options))
+            using (var context = new DataDbContext(options3))
             {
                 var filmService = new MovieService(context);
                 var original = filmService.Create(new MoviePostModel
@@ -153,12 +152,12 @@ namespace TestService
         [Test]
         public void DeleteShouldRemoveAndReturnFilm()
         {
-            var options = new DbContextOptionsBuilder<DataDbContext>()
+            var options4 = new DbContextOptionsBuilder<DataDbContext>()
               .UseInMemoryDatabase(databaseName: nameof(DeleteShouldRemoveAndReturnFilm))
               .EnableSensitiveDataLogging()
               .Options;
 
-            using (var context = new DataDbContext(options))
+            using (var context = new DataDbContext(options4))
             {
                 var filmService = new MovieService(context);
                 var toAdd = filmService.Create(new MoviePostModel

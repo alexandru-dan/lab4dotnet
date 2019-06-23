@@ -134,7 +134,7 @@ namespace TestService
 
             using (var context = new DataDbContext(options))
             {
-                var userUserRolesService = new UserToRoleServices(context, null);
+                var userToRolesService = new UserToRoleServices(context, null);
 
                 User userToAdd = new User
                 {
@@ -142,6 +142,7 @@ namespace TestService
                     LastName = "Ion",
                     FirstName = "POpescu",
                     Password = "secret",
+                    Username = "userrrrr",
                     DataRegistered = DateTime.Now,
                     UserToRoles = new List<UserToRole>()
                 };
@@ -164,7 +165,7 @@ namespace TestService
                 });
                 context.SaveChanges();
 
-                string userRoleName = userUserRolesService.GetUserRoleNameById(1);
+                string userRoleName = userToRolesService.GetUserRoleNameById(13);
                 Assert.AreEqual("Regular", userRoleName);
             }
         }

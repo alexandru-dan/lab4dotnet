@@ -49,7 +49,7 @@ namespace TestService
                     Description = "Creat pentru testare"
                 });
 
-                var userRole = userRoleService.GetById(1);
+                var userRole = userRoleService.GetById(addUserRole.Id);
                 Assert.AreEqual("Rol testare", userRole.Name);
             }
         }
@@ -71,7 +71,7 @@ namespace TestService
                     Description = "Creat pentru testare"
                 });
 
-                var userRole = context.UserRoles.Find(1);
+                var userRole = context.UserRoles.Find(addUserRole.Id);
                 Assert.AreEqual(addUserRole.Name, userRole.Name);
             }
         }
@@ -94,7 +94,7 @@ namespace TestService
                     Description = "Creat pentru testare"
                 });
 
-                var userRole = context.UserRoles.Find(1);
+                var userRole = context.UserRoles.Find(addUserRole.Id);
                 Assert.AreEqual(addUserRole.Name, userRole.Name);
             }
         }

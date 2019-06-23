@@ -167,7 +167,6 @@ namespace Lab1.Services
         public UserGetModel GetById(int id)
         {
             User user = context.Users
-                .AsNoTracking()
                 .FirstOrDefault(u => u.Id == id);
 
             return UserGetModel.FromUser(user);
