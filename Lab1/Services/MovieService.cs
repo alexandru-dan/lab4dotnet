@@ -13,7 +13,7 @@ namespace Lab1.Services
         PaginatedList<MovieGetModel> GetAllMovies(int page, DateTime? from, DateTime? to);
         Movie GetById(int id);
         Movie Create(MoviePostModel movie, User addedBy);
-        Movie Upsert(int id, MoviePostModel movie);
+        Movie Upsert(int id, Movie movie);
         Movie Delete(int id);
     }
 
@@ -78,23 +78,21 @@ namespace Lab1.Services
             return Context.Movies.Include(movie => movie.Comments).FirstOrDefault(movie => movie.Id == id);
         }
 
-        public Movie Upsert(int id, MoviePostModel movie)
+        public Movie Upsert(int id, Movie movie)
         {
             var existing = Context.Movies.AsNoTracking().FirstOrDefault(c => c.Id == id);
 
             if (existing == null)
             {
-                Movie toAdd = MoviePostModel.ToMovie(movie);
-                Context.Movies.Add(toAdd);
+                Context.Movies.Add(movie);
                 Context.SaveChanges();
 
-                return toAdd;
+                return movie;
             }
-            Movie toUpdate = MoviePostModel.ToMovie(movie);
-            toUpdate.Id = id;
-            Context.Movies.Update(toUpdate);
+            movie.Id = id;
+            Context.Movies.Update(movie);
             Context.SaveChanges();
-            return toUpdate;
+            return movie;
         }
     }
 }

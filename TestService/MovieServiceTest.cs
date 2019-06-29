@@ -121,31 +121,31 @@ namespace TestService
             using (var context = new DataDbContext(options3))
             {
                 var filmService = new MovieService(context);
-                var original = filmService.Create(new MoviePostModel
+                var original = filmService.Upsert(1,new Movie
                 {
                     Title = "Original",
                     Director = "dir1",
                     DateAdded = new DateTime(),
                     DurationInMinutes = 100,
                     Description = "asdvadfbdbsb",
-                    MovieGenre = "Comedy",
                     ReleseYear = 2000,
-                    Rating = 3,
-                    WasWatched = "NO"
-                }, null);
+                    Rating = 3
+                });
 
+                context.SaveChanges();
+                
 
-                var film = new MoviePostModel
+                var film = new Movie
                 {
                     Title = "upsert"
                 };
 
                 context.Entry(original).State = EntityState.Detached;
 
-                var result = filmService.Upsert(1, film);
+                var result = filmService.Upsert(original.Id, film);
 
                 Assert.IsNotNull(original);
-                Assert.AreEqual("upsert", result.Title);
+                Assert.AreEqual(film.Title, result.Title);
             }
         }
 
@@ -182,5 +182,25 @@ namespace TestService
                 Assert.AreEqual(0, filmService.GetAllMovies(1, null, null).Entries.Count);
             }
         }
+
+        [Test]
+        public void DeleteShouldReturnNull()
+        {
+            var options5 = new DbContextOptionsBuilder<DataDbContext>()
+              .UseInMemoryDatabase(databaseName: nameof(DeleteShouldReturnNull))
+              .EnableSensitiveDataLogging()
+              .Options;
+
+            using (var context = new DataDbContext(options5))
+            {
+                var filmService = new MovieService(context);
+
+                var deletedFilm = filmService.Delete(1);
+
+                Assert.AreEqual(0, filmService.GetAllMovies(1, null, null).Entries.Count);
+            }
+        }
+
+
     }
 }

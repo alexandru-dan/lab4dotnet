@@ -5,12 +5,24 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TestService
 {
-    class UserRoleServiceTest
+    public class UserRoleServiceTest
     {
+        private UserRole roleAdmin;
+        [SetUp]
+        public void Setup()
+        {
+            roleAdmin = new UserRole
+            {
+                Name = "Aadmin",
+                Description = "Admin"
+            };
+        }
+
         [Test]
         public void GetAllShouldReturnUserRoles()
         {
@@ -77,26 +89,73 @@ namespace TestService
         }
 
 
+        //[Test]
+        //public void UpsertShouldAddNew()
+        //{
+        //    var options = new DbContextOptionsBuilder<DataDbContext>()
+        //      .UseInMemoryDatabase(databaseName: nameof(UpsertShouldAddNew))
+        //      .EnableSensitiveDataLogging()
+        //      .Options;
+
+        //    using (var context = new DataDbContext(options))
+        //    {
+        //        var userRoleService = new UserRoleService(context);
+        //        var addUserRole = userRoleService.Upsert(1, new UserRole
+        //        {
+        //            Name = "Rol testare",
+        //            Description = "Creat pentru testare"
+        //        });
+
+        //        var userRole = context.UserRoles.Find(addUserRole.Id);
+        //        Assert.AreEqual(addUserRole.Name, userRole.Name);
+        //    }
+
+        //}
+
         [Test]
         public void UpsertShouldChangeTheFildValuesForRole()
         {
             var options = new DbContextOptionsBuilder<DataDbContext>()
-              .UseInMemoryDatabase(databaseName: nameof(UpsertShouldChangeTheFildValuesForRole))
-              .EnableSensitiveDataLogging()
+              .UseInMemoryDatabase(databaseName: nameof(CreateShouldAddAndReturnTheRole))
               .Options;
 
             using (var context = new DataDbContext(options))
             {
-                var userRoleService = new UserRoleService(context);
-                var addUserRole = userRoleService.Create(new UserRolePostModel
-                {
-                    Name = "Rol testare",
-                    Description = "Creat pentru testare"
-                });
 
-                var userRole = context.UserRoles.Find(addUserRole.Id);
-                Assert.AreEqual(addUserRole.Name, userRole.Name);
+
+                var userRoleService = new UserRoleService(context);
+                userRoleService.Upsert(1 ,roleAdmin);
+
+                var addedRole = context.UserRoles.Last();
+
+                int id = addedRole.Id;
+
+                //context.SaveChanges();
+
+
+                //var upsertUserRole = userRoleService.Upsert(addUserRole.Id, new UserRole
+                //{
+                //    Name = "Admin",
+                //    Description = "Modificat pentru testare"
+                //});
+
+                UserRole newRole = new UserRole
+                {
+                    Name = "AdminModificat",
+                    Description = "Admiiin"
+                };
+
+                context.Entry(addedRole).State = EntityState.Detached;
+
+                var updateRole = userRoleService.Upsert(id, newRole);
+
+
+                var lastRole = context.UserRoles.Last();
+
+                Assert.AreEqual(lastRole.Name, newRole.Name);
             }
+            
+
         }
 
         [Test]
@@ -123,6 +182,23 @@ namespace TestService
 
                 Assert.IsNotNull(deletedUserRole);
                 Assert.AreEqual(addUserRole.Name, deletedUserRole.Name);
+            }
+        }
+
+        [Test]
+        public void DeleteNothing()
+        {
+            var options = new DbContextOptionsBuilder<DataDbContext>()
+              .UseInMemoryDatabase(databaseName: nameof(DeleteNothing))
+              .EnableSensitiveDataLogging()
+              .Options;
+
+            using (var context = new DataDbContext(options))
+            {
+                var userRoleService = new UserRoleService(context);
+
+                var deletedUserRole = userRoleService.Delete(1);
+                Assert.AreEqual(0, context.UserRoles.Count());
             }
         }
     }

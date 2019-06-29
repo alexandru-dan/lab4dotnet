@@ -42,7 +42,7 @@ namespace Lab1.Services
         {
             int userRoleId = context.UserToRoles
                .AsNoTracking()
-                .FirstOrDefault(uur => uur.UserId == id && uur.EndTime == null)
+                .FirstOrDefault(uur => uur.Id == id && uur.EndTime == null)
                 .UserRoleId;
 
             string numeRol = context.UserRoles

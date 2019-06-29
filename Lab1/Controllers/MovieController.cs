@@ -129,7 +129,7 @@ namespace Lab1.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Put(int id, [FromBody] MoviePostModel movie)
+        public IActionResult Put(int id, [FromBody] Movie movie)
         {
             if (!ModelState.IsValid)
             {

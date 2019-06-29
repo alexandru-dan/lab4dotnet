@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TestService
@@ -164,8 +165,9 @@ namespace TestService
                     EndTime = null
                 });
                 context.SaveChanges();
+                var userToRoleId = context.UserToRoles.Last();
 
-                string userRoleName = userToRolesService.GetUserRoleNameById(13);
+                string userRoleName = userToRolesService.GetUserRoleNameById(userToRoleId.Id);
                 Assert.AreEqual("Regular", userRoleName);
             }
         }

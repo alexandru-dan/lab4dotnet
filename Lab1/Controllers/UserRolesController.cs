@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lab1.Models;
 using Lab1.Services;
 using Lab1.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -101,7 +102,7 @@ namespace Lab1.Controllers
         /// <returns>Status 200 daca a fost modificat</returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UserRolePostModel userRolePostModel)
+        public IActionResult Put(int id, [FromBody] UserRole userRolePostModel)
         {
             var result = userRoleService.Upsert(id, userRolePostModel);
             return Ok(result);

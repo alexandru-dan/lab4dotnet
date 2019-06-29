@@ -13,7 +13,7 @@ namespace Lab1.Services
         IEnumerable<UserRoleGetModel> GetAll();
         UserRoleGetModel GetById(int id);
         UserRoleGetModel Create(UserRolePostModel userRolePostModel);
-        UserRoleGetModel Upsert(int id, UserRolePostModel userRolePostModel);
+        UserRole Upsert(int id, UserRole userRolePostModel);
         UserRoleGetModel Delete(int id);
     }
     public class UserRoleService : IUserRoleService
@@ -46,22 +46,35 @@ namespace Lab1.Services
         }
 
 
-        public UserRoleGetModel Upsert(int id, UserRolePostModel userRolePostModel)
+        public UserRole Upsert(int id, UserRole userRole)
         {
+
             var existing = context.UserRoles.AsNoTracking().FirstOrDefault(ur => ur.Id == id);
+            
             if (existing == null)
             {
-                UserRole toAdd = UserRolePostModel.ToUserRole(userRolePostModel);
-                context.UserRoles.Add(toAdd);
+                //UserRole toAdd = UserRolePostModel.ToUserRole(userRolePostModel);
+                //context.UserRoles.Add(toAdd);
+                //context.SaveChanges();
+                //return UserRoleGetModel.FromUserRole(toAdd);
+                context.UserRoles.Add(userRole);
                 context.SaveChanges();
-                return UserRoleGetModel.FromUserRole(toAdd);
-            }
 
-            UserRole toUpdate = UserRolePostModel.ToUserRole(userRolePostModel);
-            toUpdate.Id = id;
-            context.UserRoles.Update(toUpdate);
+                return userRole;
+            }
+            //UserRole userRole = context.UserRoles.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            //userRolePost.Id = id;
+
+            //context.UserRoles.Update(userRole);
+            //context.SaveChanges();
+            //return UserRoleGetModel.FromUserRole(userRole);
+
+            userRole.Id = id;
+            context.UserRoles.Update(userRole);
+
             context.SaveChanges();
-            return UserRoleGetModel.FromUserRole(toUpdate);
+
+            return userRole;
         }
 
 

@@ -88,6 +88,34 @@ namespace Test
             }
         }
 
+        [Test]
+        public void InvalidRegisterShouldReturnErrorsCollection2()
+        {
+            var options = new DbContextOptionsBuilder<DataDbContext>()
+                         .UseInMemoryDatabase(databaseName: nameof(InvalidRegisterShouldReturnErrorsCollection2))
+                         .Options;
+
+            using (var context = new DataDbContext(options))
+            {
+                var validator = new RegisterValidator();
+                var usersService = new UsersService(context, config, validator, null);
+                var added = new RegisterPostModel
+                {
+                    FirstName = "firstName1",
+                    LastName = "lastName1",
+                    Username = "test_userName1",
+                    Email = "first@yahoo.com",
+                    Password = "111"    //invalid password should invalidate register
+                };
+
+                var result = usersService.Create(added);
+
+                Assert.IsNotNull(result);
+                Assert.AreEqual(1, result.ErrorMessages.Count());
+            }
+        }
+
+
 
         [Test]
         public void AuthenticateShouldLogTheRegisteredUser()
@@ -121,6 +149,8 @@ namespace Test
                 };
                 var result = usersService.Register(added);
 
+                var registeredUser = context.Users.Last();
+
                 var authenticated = new LoginPostModel
                 {
                     Username = "test_userName1",
@@ -128,6 +158,8 @@ namespace Test
                 };
                 //valid authentification
                 var authresult = usersService.Authenticate(added.Username, added.Password);
+
+                usersService.GetCurrentUserRole(registeredUser);
 
                 Assert.IsNotNull(authresult);
                 Assert.AreEqual(1, authresult.Id);
@@ -323,6 +355,24 @@ namespace Test
             }
         }
 
+        [Test]
+        public void DeleteShouldDoNothing()
+        {
+            var options = new DbContextOptionsBuilder<DataDbContext>()
+            .UseInMemoryDatabase(databaseName: nameof(DeleteShouldDoNothing))
+            .Options;
+
+            using (var context = new DataDbContext(options))
+            {
+                var validator = new RegisterValidator();
+                var usersService = new UsersService(context, config, validator, null);
+
+                var userDeleted = usersService.Delete(1);
+                Assert.AreEqual(0, usersService.GetAll().Count());
+
+            }
+        }
+
 
         [Test]
         public void UpsertShouldModifyFildsValues()
@@ -335,7 +385,7 @@ namespace Test
             {
                 var validator = new RegisterValidator();
                 var usersService = new UsersService(context, config, validator, null);
-                var added22 = new RegisterPostModel
+                var added22 = new UserPostModel
                 {
                     FirstName = "Nume",
                     LastName = "Prenume",
@@ -344,7 +394,12 @@ namespace Test
                     Password = "333333"
                 };
 
-                usersService.Create(added22);
+                usersService.Upsert(1,added22);
+
+
+                User registered = context.Users.Last();
+
+                int id = registered.Id;
 
                 var updated = new UserPostModel
                 {
@@ -355,11 +410,14 @@ namespace Test
                     Password = "333333"
                 };
 
-                var userUpdated = usersService.Upsert(1, updated);
+                context.Entry(registered).State = EntityState.Detached;
+
+                var userUpdated = usersService.Upsert(id, updated);
+
+                var lastRole = context.Users.Last();
 
                 Assert.NotNull(userUpdated);
-                Assert.AreEqual("Alin", userUpdated.FirstName);
-                Assert.AreEqual("Popescu", userUpdated.LastName);
+                Assert.AreEqual(lastRole.FirstName, updated.FirstName);
 
             }
         }
